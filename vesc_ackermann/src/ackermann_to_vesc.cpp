@@ -16,13 +16,13 @@ inline bool getRequiredParam(const ros::NodeHandle& nh, std::string name, T& val
 AckermannToVesc::AckermannToVesc(ros::NodeHandle nh, ros::NodeHandle private_nh)
 {
   // get conversion parameters
-  if (!getRequiredParam(private_nh, "speed_to_erpm_gain", speed_to_erpm_gain_))
+  if (!getRequiredParam(private_nh, "~speed_to_erpm_gain", speed_to_erpm_gain_))
     return;
-  if (!getRequiredParam(private_nh, "speed_to_erpm_offset", speed_to_erpm_offset_))
+  if (!getRequiredParam(private_nh, "~speed_to_erpm_offset", speed_to_erpm_offset_))
     return;
-  if (!getRequiredParam(private_nh, "steering_angle_to_servo_gain", steering_to_servo_gain_))
+  if (!getRequiredParam(private_nh, "~steering_angle_to_servo_gain", steering_to_servo_gain_))
     return;
-  if (!getRequiredParam(private_nh, "steering_angle_to_servo_offset", steering_to_servo_offset_))
+  if (!getRequiredParam(private_nh, "~steering_angle_to_servo_offset", steering_to_servo_offset_))
     return;
 
   // create publishers to vesc electric-RPM (speed) and servo commands
@@ -54,7 +54,7 @@ void AckermannToVesc::ackermannCmdCallback(const AckermannMsgPtr& cmd)
 template <typename T>
 inline bool getRequiredParam(const ros::NodeHandle& nh, std::string name, T& value)
 {
-  if (nh.getParam(name, value))
+  if (ros::param::get(name, value))
     return true;
 
   ROS_FATAL("AckermannToVesc: Parameter %s is required.", name.c_str());
